@@ -33,7 +33,7 @@ start_month=now.month
 
 THRESHOLD_TIME1=THRESHOLD_TIME
 
-def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):			#Function for reading meter data
+def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):			#Function  for reading meter data
     result = client.read_holding_registers(regIndex, numRegisters, unit=slaveUnit)
     return result
 
