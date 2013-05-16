@@ -18,7 +18,7 @@ apt-get install nano
 apt-get install cython
 
 #For using that pc utilization info for logs
-#easy_install pcutil
+#easy_install psutil
 
 # For adafruit Web-ide un-comment following two lines
 
