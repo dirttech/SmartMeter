@@ -2,7 +2,7 @@ THRESHOLD_TIME=900                    #Time in seconds after which a new CSV get
 
 DATA_BASE_PATH="/home/pi/Meter_Data/" #The path where the data gets stored
 
-METER_PORT="/dev/ttyUSB0"  	      #The serial port where the meter is connected
+METER_PORT="/dev/ttyUSB0"  	      #The serial port  where the meter is connected
 
 METER_ID=[1,2,3,4] 		      #The slave id assigned to the meter
 
