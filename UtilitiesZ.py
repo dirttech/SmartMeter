@@ -56,7 +56,7 @@ def find_count(day,month):
             if lt == 0:
 	        return 0
             else:
-	    #print "now in else"
+	    #print "now in else "
 	    #file_numbers_list=len(glob.glob1(path,"
                 file_numbers_list=[int(re_pattern.match(file_name).group(1)) for file_name in list_of_files]
                 return max(file_numbers_list)+1
