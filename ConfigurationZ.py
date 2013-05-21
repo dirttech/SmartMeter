@@ -1,12 +1,12 @@
 THRESHOLD_TIME=900                    #Time in seconds after which a new CSV gets created
 
-DATA_BASE_PATH="/home/pi/Meter_Data/" #The path where the data gets stored
+DATA_BASE_PATH="/home/inderpal/Meter_Data/" #The path where the data gets stored
+LOG_PATH = "/home/inderpal/"
+METER_PORT="/dev/ttyUSB2"  	      #The serial port where the meter is connected
 
-METER_PORT="/dev/ttyUSB0"  	      #The serial port  where the meter is connected
+METER_ID=[2,4,5,6,8,9,10,11,12,13,14] 		      #The slave id assigned to the meter
 
-METER_ID=[1,2,3,4] 		      #The slave id assigned to the meter
-
-#HEADER="Timestamp,A1,A2,A3,V1,V2,V3,PF1,PF2,PF3,F,Onhrs,FwdWh,RevWh\n"
+HEADER="Timestamp,A1,A2,A3,V1,V2,V3,PF1,PF2,PF3,F,Onhrs,FwdWh,RevWh\n"
 
 BASE_UPLOAD_PATH=""
 
@@ -27,7 +27,7 @@ STOP_BITS = 1
 BYTE_SIZE = 8
 PARITY = 'N'
 COM_METHOD = 'rtu'
-TIME_OUT = 0.1
+TIME_OUT = 0.05
 BAUD_RATE=19200                   #The baud rate for serial communication
 
 BASE_REGISTER = 3900

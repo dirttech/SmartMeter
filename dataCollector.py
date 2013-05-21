@@ -8,13 +8,14 @@ import time
 from UtilitiesZ import convert, makeFolder, delete_older_folders
 from ConfigurationZ import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
     TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID,POSITION_HEADER, \
-    STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES
+    STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES, LOG_PATH
 import subprocess
 import sys
 import os
 import logging
+import logging.handlers
 import gc
-import psutil
+#import psutil
 
 
 
@@ -35,7 +36,7 @@ class FaultyFileError(DataCollectorError): pass
 lgr = logging.getLogger('SmartMeter App')        #created logger
 lgr.setLevel(logging.ERROR)
 
-fh = logging.FileHandler("OuterLog.log")                             #added file handler
+fh = logging.handlers.RotatingFileHandler(LOG_PATH+"OuterLog.log", maxBytes = (1024*50), backupCount=10)                             #added file handler
 fh.setLevel(logging.WARNING)
 
 frmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')    #created formatter
@@ -231,7 +232,7 @@ def main():
 
             if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
 
-                cpuTime = psutil.cpu_times()
+                '''cpuTime = psutil.cpu_times()
                 cpuPercent = psutil.cpu_times_percent()
                 virtualMemory = psutil.virtual_memory()
                 swapMemory = psutil.swap_memory()
@@ -243,7 +244,7 @@ def main():
                 lgr.critical(virtualMemory)
                 lgr.critical(swapMemory)
                 lgr.critical(network)
-                lgr.critical(test)
+                lgr.critical(test)'''
                 
                 count = count + 1
                 makeFolder(now_day,now_month)       
@@ -301,3 +302,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
