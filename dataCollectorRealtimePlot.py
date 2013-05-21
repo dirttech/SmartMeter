@@ -6,7 +6,7 @@ import csv
 import datetime
 import time
 from UtilitiesZ import convert, makeFolder, delete_older_folders
-from ConfigurationZ import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
+from ConfigurationL import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
     TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID,POSITION_HEADER, \
 	STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES
 import subprocess
@@ -31,9 +31,8 @@ start_day=now.day
 global start_month
 start_month=now.month
 
-THRESHOLD_TIME1=THRESHOLD_TIME
 
-def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):			#Function  for reading meter data
+def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):			#Function for reading meter data
     result = client.read_holding_registers(regIndex, numRegisters, unit=slaveUnit)
     return result
 
@@ -107,7 +106,7 @@ def zmq_producer(context, client):
         now_month=now.month
        	
 	global start_time, start_day, count
-        if ((now_time-start_time) > THRESHOLD_TIME1) or (now_day!=start_day):
+        if ((now_time-start_time) > THRESHOLD_TIME) or (now_day!=start_day):
                         
             count = count + 1
 	    makeFolder(now_day, now_month)                   
@@ -143,12 +142,15 @@ def zmq_producer(context, client):
                     print "Meter: "+str(MID) +"\n"+str(row)
 
                     row=row[:-1]+"\n"
+                    
                     global start_day, start_month
                     
                     makeFolder(start_day,start_month)
                     
-                    socket.send(row)		#sending meter data (row) to socket for live visualization
+                    socket.send(row)            #sending meter data (row) to socket for live visualization
+                    
                     f =open(DATA_BASE_PATH +str(start_day)+"_"+str(start_month)+"/"+str(count)+".csv","a")
+                    
                     f.write(row)		#writing meter data (row) in CSV
                     
                     gevent.sleep(0.05)		#never remove this delay / you may change amount of delay
