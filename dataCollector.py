@@ -36,7 +36,7 @@ class FaultyFileError(DataCollectorError): pass
 lgr = logging.getLogger('SmartMeter App')        #created logger
 lgr.setLevel(logging.ERROR)
 
-fh = logging.handlers.RotatingFileHandler(LOG_PATH+"OuterLog.log", maxBytes = (1024*50), backupCount=10)                             #added file handler
+fh = logging.handlers.RotatingFileHandler(LOG_PATH+"OuterLog.log", maxBytes = (1024*1024*50), backupCount=10)                             #added file handler
 fh.setLevel(logging.WARNING)
 
 frmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')    #created formatter
