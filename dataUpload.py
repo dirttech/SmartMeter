@@ -38,7 +38,7 @@ try:
                         os.remove(DATA_PATH+f1)
                         
                         lo=open(DATA_BASE_PATH+"LOG_UPLOAD.txt","a")
-                        lo.write(str(time.time())+"  "+"upload success \n")
+                        lo.write(str(time.time())+"  Removed: "+DATA_PATH+f1+"upload success \n")
                         lo.close()
                     else:
                         os.rename(DATA_PATH+f1,f)                        
