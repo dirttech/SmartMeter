@@ -43,9 +43,9 @@ try:
                     else:
                         os.rename(DATA_PATH+f1,f)                        
                         
-            except Exception as f:
+            except Exception as e:
                 lo=open(DATA_BASE_PATH+"LOG_UPLOAD.txt","a")
-                lo.write(str(time.time())+"  "+"filename: "+f +"  Error: "+f.__str__()+"\n")
+                lo.write(str(time.time())+"  "+"filename: "+f +"  Error: "+e.__str__()+"\n")
                 lo.close()
     
                 
