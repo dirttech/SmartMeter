@@ -1,0 +1,10 @@
+# Your /etc/rc.local should include following lines
+
+sudo vmstat -n 900 >> /home/pi/SmartMeter/System_Util_Stat.txt &
+
+# in case of you are using wifi connection uncomment below line
+#sh /home/pi/SmartMeter/wifi_drop.sh &
+
+sudo python /home/pi/SmartMeter/dataCollector.py &
+
+sudo python /home/pi/SmartMeter/dataUpload.py &
