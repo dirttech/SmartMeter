@@ -11,7 +11,7 @@ CODE_PATH = os.path.dirname(sys.argv[0])
 
 DATA_BASE_PATH = CODE_PATH + "/Meter_Data/"   #The path where the data gets stored
 
-LOG_PATH = CODE_PATH
+LOG_PATH = CODE_PATH+"/"
 
 METER_PORT=find_tty_usb(idVendor = '0403',idProduct = '6001')              #The serial port where the meter is connected
 #print METER_PORT
