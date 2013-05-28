@@ -20,7 +20,16 @@ import gc
 
 
 ''' testing Framework starts here'''
-class DataCollectorError(Exception) : pass
+class DataCollectorError(Exception) :
+    def __init__(self, msg=''):
+        self.msg = msg
+        log(msg)  # use your logging things here
+
+    def __str__(self):
+        return self.msg
+    
+    pass
+
 class ParamNullError(DataCollectorError) : pass
 class ParamInvalidTypeError(DataCollectorError) : pass
 class ParamOutOfRangeError(DataCollectorError) : pass
@@ -62,46 +71,44 @@ def CONNECT_TO_METER():
 
 def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):
 
+    if not regIndex:
+        raise ParamNullError, "register index is null"
+
+    if not numRegisters:
+        raise ParamNullError, "number of registers should not be null"
+
+    if not slaveUnit:
+        raise ParamNullError, "Meter Id should not be null"
+
+    if not isinstance(regIndex, int):
+        raise ParamInvalidTypeError, "register index passed is not int"
+
+    if not isinstance(numRegisters, int):
+        raise ParamInvalidTypeError, "number of registers passed is not int"
+
+    if not isinstance(slaveUnit, int):
+        raise ParamInvalidTypeError, "meter id passed is not int"
+
+    if not 3900 <= regIndex <= 4000:
+        raise ParamOutOfRangeError, "Initial register index should be b/w 3900-4000"
+
+    if(regIndex % 2 != 0):
+        raise ParamInvalidFormatError, "Initial register index should be even"
+
+    if not 2 <= numRegisters <= 100:
+        raise ParamOutOfRangeError, "Number of registers to read should be b/w 2 - 100"
+
+    if (numRegisters % 2 != 0):
+        raise ParamInvalidFormatError, "Number of registers to read should be even"
+
+    if not 1 <= slaveUnit <= 31:
+        raise ParamOutOfRangeError, "Meter Id passed should be b/w 1 - 31"
+    
     try:
-        if not regIndex:
-            raise ParamNullError, "register index is null"
-
-        if not numRegisters:
-            raise ParamNullError, "number of registers should not be null"
-
-        if not slaveUnit:
-            raise ParamNullError, "Meter Id should not be null"
-
-        if not isinstance(regIndex, int):
-            raise ParamInvalidTypeError, "register index passed is not int"
-
-        if not isinstance(numRegisters, int):
-            raise ParamInvalidTypeError, "number of registers passed is not int"
-
-        if not isinstance(slaveUnit, int):
-            raise ParamInvalidTypeError, "meter id passed is not int"
-
-        if not 3900 <= regIndex <= 4000:
-            raise ParamOutOfRangeError, "Initial register index should be b/w 3900-4000"
-
-        if(regIndex % 2 != 0):
-            raise ParamInvalidFormatError, "Initial register index should be even"
-
-        if not 2 <= numRegisters <= 100:
-            raise ParamOutOfRangeError, "Number of registers to read should be b/w 2 - 100"
-
-        if (numRegisters % 2 != 0):
-            raise ParamInvalidFormatError, "Number of registers to read should be even"
-
-        if not 1 <= slaveUnit <= 31:
-            raise ParamOutOfRangeError, "Meter Id passed should be b/w 1 - 31"
-        
+                
         result = client.read_holding_registers(regIndex, numRegisters, unit=slaveUnit)
         return result
     
-    except DataCollectorError as d:
-        lgr.error('DataCollector Error(READ_METER_DATA): '+d.args[0])
-        print 'DataCollector Error:(READ_METER_DATA)', d.args[0]
     except:
         lgr.error('Unexpected Error: ', sys.exc_info())
         print 'Unexpected Error: ', sys.exc_info()
@@ -111,20 +118,19 @@ def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):
         
 
 def FORMAT_READ_DATA(regObject, MID):
-    
+
+    if not regObject:
+        raise ParamNullError, "Register object passed is null"
+
+    if not MID:
+        raise ParamNullError, "Meter Id passed is null"
+
+    if not isinstance(MID, int):
+        raise ParamInvalidTypeError, "Meter id pass is of wrong type (should be int)"
+
+    #if not isinstance(regObject, str):
+    #    raise ParamInvalidTypeError, "Register object passed is of wrong type: "+str(type(k))
     try:
-        
-        if not regObject:
-            raise ParamNullError, "Register object passed is null"
-
-        if not MID:
-            raise ParamNullError, "Meter Id passed is null"
-
-        if not isinstance(MID, int):
-            raise ParamInvalidTypeError, "Meter id pass is of wrong type (should be int)"
-
-        #if not isinstance(regObject, str):
-        #    raise ParamInvalidTypeError, "Register object passed is of wrong type: "+str(type(k))
 
         r1=int(time.time())
         row = str(DEVICE_ID)+","+str(MID)+","+str(r1)
@@ -137,44 +143,38 @@ def FORMAT_READ_DATA(regObject, MID):
                    
         row=row[:-1]+"\n"
         return row
-    
-    except DataCollectorError as d:
-        lgr.error('DataCollector Error(FORMAT_READ_DATA): '+d.args[0])
-        print 'DataCollector Error(FORMAT_READ_DATA): ', d.args[0]
+
     except:
         lgr.error('Unexpected Error: FORMAT_READ_DATA', sys.exc_info())
         print 'Unexpected Error: FORMAT_READ_DATA', sys.exc_info()
         pass
     
 def WRITING_HEADER(filePath, fileName):
+
+    if not filePath:
+        raise ParamNullError, "path should not be empty"
     
+    if not fileName:
+        raise ParamNullError, "file name should not be empty"
+
+    if not isinstance(filePath, str):
+        raise ParamInvalidTypeError, "file path should be string type"
+    
+    if not isinstance(fileName, str):
+        raise ParamInvalidTypeError, "file name should be string type"
+
+    if not os.path.exists(filePath):
+        raise PathNotExistsError, "path does not exists"
+    
+    if (fileName.endswith(".csv") == False):
+        raise FaultyFileError, "file should be .csv"
+        
     try:
-        
-        if not filePath:
-            raise ParamNullError, "path should not be empty"
-        
-        if not fileName:
-            raise ParamNullError, "file name should not be empty"
-
-        if not isinstance(filePath, str):
-            raise ParamInvalidTypeError, "file path should be string type"
-        
-        if not isinstance(fileName, str):
-            raise ParamInvalidTypeError, "file name should be string type"
-
-        if not os.path.exists(filePath):
-            raise PathNotExistsError, "path does not exists"
-        
-        if (fileName.endswith(".csv") == False):
-            raise FaultyFileError, "file should be .csv"
 
         f =open(str(filePath)+str(fileName) ,"a")                      #Creating new file
         f.write(HEADER)
         f.close()
 
-    except DataCollectorError as d:
-        lgr.error('DataCollector Error(WRITING_HEADER): '+d.args[0])
-        print 'DataCollector Error(WRITING_HEADER): ', d.args[0]
     except:
         lgr.error('Unexpected Error: ', sys.exc_info())
         print 'Unexpected Error: ', sys.exc_info()
@@ -184,36 +184,33 @@ def WRITING_HEADER(filePath, fileName):
 
 def WRITE_METER_DATA(filePath, fileName, row):
 
+    if not filePath:
+        raise ParamNullError, "path should not be empty"
+    
+    if not fileName:
+        raise ParamNullError, "file name should not be empty"
+    
+    if not isinstance(filePath, str):
+        raise ParamInvalidTypeError, "file path should be string type"
+    
+    if not isinstance(fileName, str):
+        raise ParamInvalidTypeError, "file name should be string type"
+
+    if not os.path.exists(filePath):
+        raise PathNotExistsError, "path does not exists"
+    
+    if (fileName.endswith(".csv") == False):
+        raise FaultyFileError, "file should be .csv"
+
+    if (row.endswith('\n') == False):
+        raise ParamInvalidFormatError, "row to be dumped should end with \n (new line chr)"
+        
     try:
-        
-        if not filePath:
-            raise ParamNullError, "path should not be empty"
-        
-        if not fileName:
-            raise ParamNullError, "file name should not be empty"
-        
-        if not isinstance(filePath, str):
-            raise ParamInvalidTypeError, "file path should be string type"
-        
-        if not isinstance(fileName, str):
-            raise ParamInvalidTypeError, "file name should be string type"
-
-        if not os.path.exists(filePath):
-            raise PathNotExistsError, "path does not exists"
-        
-        if (fileName.endswith(".csv") == False):
-            raise FaultyFileError, "file should be .csv"
-
-        if (row.endswith('\n') == False):
-            raise ParamInvalidFormatError, "row to be dumped should end with \n (new line chr)"
 
         f =open(filePath+fileName ,"a")   #Writing row into suitable CSV
         f.write(row)
         f.close()
 
-    except DataCollectorError as d:
-        lgr.error('DataCollector Error(WRITE_METER_DATA): '+d.args[0])
-        print 'DataCollector Error:(WRITE_METER_DATA)', d.args[0]
     except:
         lgr.error('Unexpected Error: ', sys.exc_info())
         print 'Unexpected Error: ', sys.exc_info()
