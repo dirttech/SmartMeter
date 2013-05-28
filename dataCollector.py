@@ -21,10 +21,13 @@ import gc
 
 ''' testing Framework starts here'''
 class DataCollectorError(Exception) :
+    
     def __init__(self, msg=''):
+        
         self.msg = msg
-        log(msg)  # use your logging things here
-
+        lgr.error('Custom Error: ', self.msg)
+        print "Custom Error: \n"+ self.msg
+        
     def __str__(self):
         return self.msg
     
