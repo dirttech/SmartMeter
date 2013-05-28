@@ -5,10 +5,10 @@ from pymodbus.transaction import ModbusSocketFramer as ModbusFramer
 import csv
 import datetime
 import time
-from UtilitiesZ import convert, makeFolder, delete_older_folders
-from ConfigurationZ import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
+from Utilities import convert, makeFolder, delete_older_folders, find_tty_usb
+from ConfigurationZ import METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
     TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID,POSITION_HEADER, \
-    STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES, LOG_PATH
+    STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES, LOG_PATH, ID_VENDOR, ID_PRODUCT
 import subprocess
 import sys
 import os
@@ -44,6 +44,20 @@ fh.setFormatter(frmt)                                                           
 
 lgr.addHandler(fh)                      #added handler to logger
 '''Logging framework ends here'''
+
+def CONNECT_TO_METER():
+
+    try:
+        client = None
+        METER_PORT = find_tty_usb(ID_VENDOR, ID_PRODUCT)        #reading to which port rs485(client) is connected
+        client = ModbusClient(retries = RETRIES, method=COM_METHOD, port=METER_PORT, baudrate=BAUD_RATE, stopbits=STOP_BITS, parity=PARITY, bytesize=BYTE_SIZE, timeout=TIME_OUT)
+        client.connect()
+        return client
+
+    except Exception as f:
+        lgr.error('Error while connecting client: ', exc_info = True)
+        print "Error while connecting client: \n"+e.__str__()
+
 
 
 def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):
@@ -215,8 +229,7 @@ def main():
         start_day=now.day
         start_month=now.month
 
-        client = ModbusClient(retries= RETRIES, port=METER_PORT,stopbits=STOP_BITS, bytesize=BYTE_SIZE, parity=PARITY ,baudrate=BAUD_RATE, method=COM_METHOD, timeout = TIME_OUT)
-        client.connect() 
+        client = CONNECT_TO_METER()                      #Making connection with rs485 returns client
 
         makeFolder(now.day,now.month)           #Making folder of todays day_month      
 
@@ -282,22 +295,18 @@ def main():
                     except Exception as e:
                         lgr.critical('Internal Exception: Meter: '+str(METER_ID(mId))+'\n', exc_info = True)
                         print "Internal Exception: Meter: "+str(METER_ID(mId))+'\n'+e.__str__()
-                        client.close()
+                        
                         client = None
+                        client = CONNECT_TO_METER()
 
-                        client = ModbusClient(retries = RETRIES, method=COM_METHOD, port=METER_PORT, baudrate=BAUD_RATE, stopbits=STOP_BITS, parity=PARITY, bytesize=BYTE_SIZE, timeout=TIME_OUT)
-                        client.connect()
-                    
                        
     except Exception as e:
         
         lgr.error('Some how program is terminated', exc_info = True)
         print "Error in outer shell - \n"+e.__str__()
-        client.close()
-        client = None
         
-        client = ModbusClient(retries = RETRIES, method=COM_METHOD, port=METER_PORT, baudrate=BAUD_RATE, stopbits=STOP_BITS, parity=PARITY, bytesize=BYTE_SIZE, timeout=TIME_OUT)
-        client.connect()
+        client = None
+        client = CONNECT_TO_METER()
 
 
 if __name__ == "__main__":

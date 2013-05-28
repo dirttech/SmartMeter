@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # cron script for checking wlan connectivity
-IP_FOR_TEST="a.b.c.d"
+IP_FOR_TEST="11.0.0.60"
 PING_COUNT=1
 
 PING="/bin/ping"

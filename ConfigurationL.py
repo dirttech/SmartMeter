@@ -3,7 +3,6 @@
 import os
 import sys
 
-from miniUtility import find_tty_usb
 
 THRESHOLD_TIME=900                    #Time in seconds after which a new CSV gets created
 
@@ -11,8 +10,8 @@ CODE_PATH = os.path.dirname(sys.argv[0])
 
 DATA_BASE_PATH=CODE_PATH + "/Meter_Data/" #The path where the data gets stored
 
-METER_PORT=find_tty_usb(idVendor = '0403',idProduct = '6001')              #The serial port where the meter is connected
-#print METER_PORT
+ID_VENDOR = '0403'
+ID_PRODUCT = '6001'
 
 METER_ID=[1,2,3,4] 		      #The slave id assigned to the meter
 
