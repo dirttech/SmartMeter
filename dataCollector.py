@@ -54,7 +54,7 @@ def CONNECT_TO_METER():
         client.connect()
         return client
 
-    except Exception as f:
+    except Exception as e:
         lgr.error('Error while connecting client: ', exc_info = True)
         print "Error while connecting client: \n"+e.__str__()
 
