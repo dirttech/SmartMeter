@@ -5,7 +5,7 @@ from pymodbus.transaction import ModbusSocketFramer as ModbusFramer
 import csv
 import datetime
 import time
-from Utilities import convert, makeFolder, delete_older_folders, find_tty_usb
+from UtilitiesZ import convert, makeFolder, delete_older_folders, find_tty_usb
 from ConfigurationZ import METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
     TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID,POSITION_HEADER, \
     STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES, LOG_PATH, ID_VENDOR, ID_PRODUCT
@@ -110,11 +110,11 @@ def READ_METER_DATA (regIndex, numRegisters, slaveUnit, client):
         
         
 
-def FORMAT_READ_DATA(k, MID):
+def FORMAT_READ_DATA(regObject, MID):
     
     try:
         
-        if not k:
+        if not regObject:
             raise ParamNullError, "Register object passed is null"
 
         if not MID:
@@ -123,7 +123,7 @@ def FORMAT_READ_DATA(k, MID):
         if not isinstance(MID, int):
             raise ParamInvalidTypeError, "Meter id pass is of wrong type (should be int)"
 
-        #if not isinstance(k, str):
+        #if not isinstance(regObject, str):
         #    raise ParamInvalidTypeError, "Register object passed is of wrong type: "+str(type(k))
 
         r1=int(time.time())
@@ -131,7 +131,7 @@ def FORMAT_READ_DATA(k, MID):
         for i in range (0,(BLOCK_SIZE-1),2):
             for j in POSITION_HEADER:
                 if(j == i):                            
-                    kt= (k.registers[i+1]<<16) + k.registers[i]     #Formating & Filtering collected data / making it suitable for CSV format
+                    kt= (regObject.registers[i+1]<<16) + regObject.registers[i]     #Formating & Filtering collected data / making it suitable for CSV format
                     kkt =","+ str(convert(kt))
                     row = row +kkt
                    
@@ -280,9 +280,9 @@ def main():
                     try:
                         
                         #Function to read meter data  
-                        row = READ_METER_DATA(BASE_REGISTER,BLOCK_SIZE, METER_ID[mId], client)
+                        regObject = READ_METER_DATA(BASE_REGISTER,BLOCK_SIZE, METER_ID[mId], client)
                         
-                        rowData = FORMAT_READ_DATA(row  , METER_ID[mId])                                    #Function returning formatted data to be put in CSV
+                        rowData = FORMAT_READ_DATA(regObject  , METER_ID[mId])                                    #Function returning formatted data to be put in CSV
                         
                         makeFolder(start_day,start_month)
                        
