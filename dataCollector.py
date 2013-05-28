@@ -5,7 +5,7 @@ from pymodbus.transaction import ModbusSocketFramer as ModbusFramer
 import csv
 import datetime
 import time
-from UtilitiesZ import convert, makeFolder, delete_older_folders, find_tty_usb
+from Utilities import convert, makeFolder, delete_older_folders, find_tty_usb
 from ConfigurationZ import METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
     TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID,POSITION_HEADER, \
     STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES, LOG_PATH, ID_VENDOR, ID_PRODUCT
