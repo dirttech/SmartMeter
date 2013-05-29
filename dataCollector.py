@@ -304,7 +304,7 @@ def main():
     except Exception as e:
         
         lgr.error('Some how program is terminated', exc_info = True)
-        print "Error in outer shell - \n"+e.__str__()
+        print "Error in outer shell - \n", sys.exc_info()
         
         client = None
         client = CONNECT_TO_METER()
