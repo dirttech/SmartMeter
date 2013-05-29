@@ -294,8 +294,8 @@ def main():
                         print "Going Well!"  
                                     
                     except Exception as e:
-                        lgr.critical('Internal Exception: Meter: '+str(METER_ID(mId))+'\n', exc_info = True)
-                        print "Internal Exception: Meter: "+str(METER_ID(mId))+'\n'+e.__str__()
+                        lgr.critical('Internal Exception: Meter: '+'\n', exc_info = True)
+                        print "Internal Exception: Meter: "+'\n'+e.__str__()
                         
                         client = None
                         client = CONNECT_TO_METER()
