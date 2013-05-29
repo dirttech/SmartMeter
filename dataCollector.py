@@ -19,6 +19,28 @@ import gc
 
 
 
+'''Logging framework starts here'''
+lgr = logging.getLogger('SmartMeter App')        #created logger
+lgr.setLevel(logging.ERROR)
+
+
+
+
+fh = logging.handlers.RotatingFileHandler(LOG_PATH+"OuterLog.log", maxBytes = (1024*1024*50), backupCount=10)                             #added file handler
+fh.setLevel(logging.WARNING)
+
+
+
+
+frmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')    #created formatter
+fh.setFormatter(frmt)                                                               #set formatter for handler
+
+
+
+
+lgr.addHandler(fh)                      #added handler to logger
+'''Logging framework ends here'''
+
 ''' testing Framework starts here'''
 class DataCollectorError(Exception) :
     
@@ -43,19 +65,6 @@ class FaultyFileError(DataCollectorError): pass
 
 '''testing framework ends here'''
 
-
-'''Logging framework starts here'''
-lgr = logging.getLogger('SmartMeter App')        #created logger
-lgr.setLevel(logging.ERROR)
-
-fh = logging.handlers.RotatingFileHandler(LOG_PATH+"OuterLog.log", maxBytes = (1024*1024*50), backupCount=10)                             #added file handler
-fh.setLevel(logging.WARNING)
-
-frmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')    #created formatter
-fh.setFormatter(frmt)                                                               #set formatter for handler
-
-lgr.addHandler(fh)                      #added handler to logger
-'''Logging framework ends here'''
 
 def CONNECT_TO_METER():
 
