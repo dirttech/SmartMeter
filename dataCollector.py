@@ -149,6 +149,8 @@ def FORMAT_READ_DATA(regObject, MID):
         return row
 
     except:
+        client = None
+        client = CONNECT_TO_METER()
         lgr.error('Unexpected Error: FORMAT_READ_DATA', sys.exc_info())
         print 'Unexpected Error: FORMAT_READ_DATA', sys.exc_info()
         pass
