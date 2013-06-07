@@ -7,7 +7,7 @@ import datetime
 import time
 from Utilities import convert, makeFolder, delete_older_folders,find_tty_usb
 from ConfigurationL import METER_PORT, METER_ID, DATA_BASE_PATH, THRESHOLD_TIME, \
-    TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID,POSITION_HEADER, \
+    TIMEZONE, BAUD_RATE, HEADER ,DEVICE_ID, \
 	STOP_BITS,BYTE_SIZE,PARITY,COM_METHOD,TIME_OUT,BASE_REGISTER,BLOCK_SIZE, RETRIES, ID_VENDOR, ID_PRODUCT
 import subprocess
 import sys
@@ -146,11 +146,11 @@ def zmq_producer(context, client):
                     k = READ_METER_DATA(BASE_REGISTER,BLOCK_SIZE, MID, client)			      #Calling function to read meter                
                     
                     for i in range (0,(BLOCK_SIZE-1),2):
-                        for j in POSITION_HEADER:
-                            if(j == i):                            
-                                kt= (k.registers[i+1]<<16) + k.registers[i]			      #Formating & Filtering collected data / making it suitable for CSV format
-                                kkt =","+ str(convert(kt))
-                                row = row +kkt                      
+                        
+                                                    
+                        kt= (k.registers[i+1]<<16) + k.registers[i]			      #Formating & Filtering collected data / making it suitable for CSV format
+                        kkt =","+ str(convert(kt))
+                        row = row +kkt                      
                                
                    
                     print "Meter: "+str(MID) +"\n"+str(row)
