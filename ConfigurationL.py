@@ -7,6 +7,7 @@ import sys
 THRESHOLD_TIME=900                    #Time in seconds after which a new CSV gets created
 
 CODE_PATH = os.path.dirname(sys.argv[0])
+CODE_PATH = "/home/inderpal/Desktop"
 
 DATA_BASE_PATH=CODE_PATH + "/Meter_Data/" #The path where the data gets stored
 
@@ -26,6 +27,7 @@ HEADER="Building_Id,Floor_Id,Wing_Id,Meter_Id,Timestamp,VA,W,VAR,PF,VLL,VLN,A,F,
 BUILDING_ID = 1
 FLOOR_ID = 1
 WING_ID = 1
+DEVICE_ID = "1"
 
 #-------Modbus Variables-----------------------------------
 
