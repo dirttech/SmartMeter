@@ -278,18 +278,18 @@ def main():
 
                 
                                               
-                for mId in range (0,len(METER_ID)):
+                for mId in METER_ID:
                                                         
                     try:
                         
                         #Function to read meter data  
-                        regObject = READ_METER_DATA(BASE_REGISTER,BLOCK_SIZE, METER_ID[mId], client)
+                        regObject = READ_METER_DATA(BASE_REGISTER,BLOCK_SIZE, mId, client)
                         
-                        rowData = FORMAT_READ_DATA(regObject  , METER_ID[mId])                                    #Function returning formatted data to be put in CSV
+                        rowData = FORMAT_READ_DATA(regObject  , mId)                                    #Function returning formatted data to be put in CSV
                         
                         makeFolder(start_day,start_month)
                        
-                        print "Writing :"+"\n"+str(rowData)+"\n"
+                        print "Writing meter: "+str(mId)+"\n"+str(rowData)+"\n"
                 
                         WRITE_METER_DATA(DATA_BASE_PATH +str(start_day)+"_"+str(start_month)+"/", str(count)+".csv", rowData)   #Writing row into suitable CSV
 
