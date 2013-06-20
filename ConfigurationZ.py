@@ -6,6 +6,7 @@ import sys
 THRESHOLD_TIME=900                    #Time in seconds after which a new CSV gets created
 
 CODE_PATH = os.path.dirname(sys.argv[0])
+CODE_PATH="/home/pi/SmartMeter"
 
 DATA_BASE_PATH = CODE_PATH + "/Meter_Data/"   #The path where the data gets stored
 
