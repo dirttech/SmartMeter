@@ -38,7 +38,7 @@ STOP_BITS = 1
 BYTE_SIZE = 8
 PARITY = 'N'
 COM_METHOD = 'rtu'
-TIME_OUT = 0.1
+TIME_OUT = 0.2
 BAUD_RATE=19200                   #The baud rate for serial communication
 
 BASE_REGISTER = 3900
